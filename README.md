@@ -1,3 +1,3 @@
-# Programmin Elixir
+# Programming Elixir
 
 Code snippets for "Programming Elixir"
