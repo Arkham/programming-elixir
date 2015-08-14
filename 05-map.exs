@@ -8,7 +8,7 @@ p.(Enum.map list, fn elem -> elem * 2 end)
 p.(Enum.map list, fn elem -> elem * elem end)
 p.(Enum.map list, fn elem -> elem > 6 end)
 
-plus_one = &(&1 + 1)
+plus_one = &(&1 + 1) # same as: plus_one = fn n -> n + 1 end
 p.(plus_one)
 p.(Enum.map list, plus_one)
 
