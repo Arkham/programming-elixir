@@ -57,19 +57,15 @@ defmodule Issues.CLI do
   end
 
   def format_into_table(list) do
-    data = [header | extract_data(list)]
+    data = [headers | extract_data(list)]
 
     max_lens = Enum.map(transpose(data), &get_max_string_length/1)
 
-    [ fitted_header | rows ] = data
-      |> Enum.map(fn row ->
-        row
-        Enum.zip(row, max_lens)
-          |> Enum.map(fn({value, len}) ->
-            " #{String.ljust(value, len, ?\s)} "
-          end)
-          |> Enum.join("|")
-      end)
+    [ fitted_header | rows ] = for row <- data do
+      Enum.zip(row, max_lens)
+        |> Enum.map(&pad_value/1)
+        |> Enum.join("|")
+    end
 
     separator = max_lens
       |> Enum.map(fn len -> String.duplicate("-", len + 2) end)
@@ -80,13 +76,19 @@ defmodule Issues.CLI do
       |> Enum.join
   end
 
-  def header do
-    ["#", "created_at", "title"]
+  def pad_value({value, length}) do
+    " #{String.ljust(value, length, ?\s)} "
+  end
+
+  def headers do
+    ["number", "created_at", "title"]
   end
 
   def extract_data(list) do
     for element <- list do
-      [element["id"], element["created_at"], element["title"]] |> Enum.map(&to_string/1)
+      headers
+        |> Enum.map(&(element[&1]))
+        |> Enum.map(&to_string/1)
     end
   end
 
