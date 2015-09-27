@@ -5,7 +5,7 @@ defmodule IssuesTest do
     parse_args: 1,
     sort_into_ascending_order: 1,
     convert_to_list_of_hashdicts: 1,
-    format_into_table: 1
+    print_tables_for_columns: 2
   ]
 
   test "returns :help when -h or --help options are passed" do
@@ -30,12 +30,12 @@ defmodule IssuesTest do
   test "formats the data nicely into a table" do
     data = fake_list([1, 20, 300])
 
-    assert format_into_table(data) == """
-     #   | created_at | title           
-    -----+------------+-----------------
-     1   | 1          | hello there 1   
-     20  | 20         | hello there 20  
-     300 | 300        | hello there 300 
+    assert print_tables_for_columns(data, ~w{id created_at title}) == """
+    id  | created_at | title          
+    ----+------------+----------------
+    1   | 1          | hello there 1  
+    20  | 20         | hello there 20 
+    300 | 300        | hello there 300
     """
   end
 

@@ -36,7 +36,11 @@ defmodule Issues.CLI do
       |> convert_to_list_of_hashdicts
       |> sort_into_ascending_order
       |> Enum.take(count)
-      |> format_into_table
+      |> print_tables_for_columns(~w{number created_at title})
+  end
+
+  def print_tables_for_columns(rows, headers) do
+    Issues.TableFormatter.print_tables_for_columns(rows, headers)
   end
 
   def decode_response({:ok, body}), do: body
@@ -54,52 +58,5 @@ defmodule Issues.CLI do
   def sort_into_ascending_order(list) do
     list
       |> Enum.sort(&(&1["created_at"] < &2["created_at"]))
-  end
-
-  def format_into_table(list) do
-    data = [headers | extract_data(list)]
-
-    max_lens = Enum.map(transpose(data), &get_max_string_length/1)
-
-    [ fitted_header | rows ] = for row <- data do
-      Enum.zip(row, max_lens)
-        |> Enum.map(&pad_value/1)
-        |> Enum.join("|")
-    end
-
-    separator = max_lens
-      |> Enum.map(fn len -> String.duplicate("-", len + 2) end)
-      |> Enum.join("+")
-
-    [ fitted_header, separator | rows ]
-      |> Enum.map(&(&1 <> "\n"))
-      |> Enum.join
-  end
-
-  def pad_value({value, length}) do
-    " #{String.ljust(value, length, ?\s)} "
-  end
-
-  def headers do
-    ["number", "created_at", "title"]
-  end
-
-  def extract_data(list) do
-    for element <- list do
-      headers
-        |> Enum.map(&(element[&1]))
-        |> Enum.map(&to_string/1)
-    end
-  end
-
-  def transpose([[]|_]), do: []
-  def transpose(list) do
-    [Enum.map(list, &hd/1) | transpose(Enum.map(list, &tl/1))]
-  end
-
-  def get_max_string_length(list) do
-    list
-      |> Enum.map(&(String.length(to_string(&1))))
-      |> Enum.max
   end
 end
