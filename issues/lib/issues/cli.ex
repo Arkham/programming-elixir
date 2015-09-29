@@ -1,7 +1,9 @@
+import Issues.TableFormatter, only: [ print_tables_for_columns: 2 ]
+
 defmodule Issues.CLI do
   @default_count 4
 
-  def run(argv) do
+  def main(argv) do
     argv
       |> parse_args
       |> process
@@ -31,16 +33,12 @@ defmodule Issues.CLI do
   end
 
   def process({user, project, count}) do
-    Issues.GithubIssues.fetch(user, project)
+    IO.puts Issues.GithubIssues.fetch(user, project)
       |> decode_response
       |> convert_to_list_of_hashdicts
       |> sort_into_ascending_order
       |> Enum.take(count)
       |> print_tables_for_columns(~w{number created_at title})
-  end
-
-  def print_tables_for_columns(rows, headers) do
-    Issues.TableFormatter.print_tables_for_columns(rows, headers)
   end
 
   def decode_response({:ok, body}), do: body
