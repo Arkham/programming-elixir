@@ -8,6 +8,8 @@ defmodule Issues.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      escript: escript_config,
+     name: "Issues",
+     source_url: "https://github.com/Arkham/programming-elixir/tree/master/issues",
      deps: deps]
   end
 
@@ -30,7 +32,9 @@ defmodule Issues.Mixfile do
   defp deps do
     [
       { :httpoison, "~> 0.7" },
-      { :jsx, "~> 2.0" }
+      { :jsx, "~> 2.0" },
+      { :ex_doc, github: "elixir-lang/ex_doc" },
+      { :earmark, ">= 0.0.0" }
     ]
   end
 
