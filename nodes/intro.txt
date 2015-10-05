@@ -1,0 +1,45 @@
+iex(node_one@AlphaMetal)1> Node.list
+[]
+iex(node_one@AlphaMetal)2> Node.self
+:node_one@AlphaMetal
+iex(node_one@AlphaMetal)3> Node.list
+[:node_two@AlphaMetal]
+iex(node_one@AlphaMetal)4> func = fn -> IO.inspect Node.self end
+#Function<20.54118792/0 in :erl_eval.expr/5>
+iex(node_one@AlphaMetal)5> spawn(func)
+:node_one@AlphaMetal
+#PID<0.72.0>
+iex(node_one@AlphaMetal)6> Node.spawn(:node_one@AlphaMetal, func)
+:node_one@AlphaMetal
+#PID<0.74.0>
+iex(node_one@AlphaMetal)7> Node.spawn(:node_two@AlphaMetal, func)
+#PID<8966.73.0>
+:node_two@AlphaMetal
+iex(node_one@AlphaMetal)8> Node.list
+[]
+iex(node_one@AlphaMetal)9> Node.list
+[:node_two@AlphaMetal]
+iex(node_one@AlphaMetal)10> func = fn -> File.ls! end
+#Function<20.54118792/0 in :erl_eval.expr/5>
+iex(node_one@AlphaMetal)11> func = fn -> IO.inspect File.ls! end
+#Function<20.54118792/0 in :erl_eval.expr/5>
+iex(node_one@AlphaMetal)12> Node.spawn(:node_one@AlphaMetal, func)
+#PID<0.84.0>
+[]
+iex(node_one@AlphaMetal)13> Node.spawn(:node_two@AlphaMetal, func)
+#PID<8966.73.0>
+[".git", ".gitignore", "01-hello.exs", "01-pmap1.exs", "05-closures.exs",
+ "05-fizzbuzz.exs", "05-handle_open.exs", "05-map.exs", "05-prefix.exs",
+ "06-chop.exs", "06-default-params.exs", "06-exercise.exs", "06-factorial.exs",
+ "06-gcd.exs", "06-guard.exs", "06-import.exs", "06-integer-sum.exs",
+ "06-module-attrs.exs", "06-namespacing.exs", "06-pipe.exs", "06-times.exs",
+ "07-list.exs", "07-my-list.exs", "07-swapper.exs", "07-weather-history.exs",
+ "08-defstruct.exs", "08-dynamic-nested.exs", "08-hotel-room.exs",
+ "08-nested.exs", "08-sets.exs", "08-sum.exs", "08-updating-maps.exs",
+ "10-cards.exs", "10-collectables.exs", "10-countdown.exs", "10-enums.exs",
+ "10-exercises.exs", "10-myenum.exs", "10-streams.exs", "11-binaries.exs",
+ "11-binary-strings.exs", "11-center-strings.exs", "11-parse.exs",
+ "11-strings.exs", "12-case.exs", "12-if-unless-cond.exs", "12-ok.exs",
+ "concurrency", "Elixir.Everything.beam", "Elixir.Fizzbuzz.beam", ...]
+iex(node_one@AlphaMetal)14>
+
