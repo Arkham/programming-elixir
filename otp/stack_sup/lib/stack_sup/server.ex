@@ -3,8 +3,8 @@ defmodule StackSup.Server do
 
   # Public API
 
-  def start_link(initial) do
-    GenServer.start_link(__MODULE__, initial, name: __MODULE__)
+  def start_link(stash_pid) do
+    GenServer.start_link(__MODULE__, stash_pid, name: __MODULE__)
   end
 
   def pop do
@@ -17,11 +17,20 @@ defmodule StackSup.Server do
 
   # GenServer implementation
 
-  def handle_call(:pop, _from, [head|tail]) do
-    {:reply, head, tail}
+  def init(stash_pid) do
+    current_stash = StackSup.Stash.get_value stash_pid
+    {:ok, {current_stash, stash_pid}}
   end
 
-  def handle_cast({:push, value}, state) do
-    {:noreply, [value|state]}
+  def handle_call(:pop, _from, {[head|tail], stash_pid}) do
+    {:reply, head, {tail, stash_pid}}
+  end
+
+  def handle_cast({:push, value}, {stack, stash_pid}) do
+    {:noreply, {[value|stack], stash_pid}}
+  end
+
+  def terminate(_reason, {stack, stash_pid}) do
+    StackSup.Stash.save_value stash_pid, stack
   end
 end
