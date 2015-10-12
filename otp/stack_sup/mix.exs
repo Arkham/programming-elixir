@@ -14,8 +14,11 @@ defmodule StackSup.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger],
-     mod: {StackSup, []}]
+    [
+      mod: {StackSup, []},
+      env: [initial_stack: [1, 4, 9]],
+      registered: [StackSup.Server]
+    ]
   end
 
   # Dependencies can be Hex packages:
