@@ -8,7 +8,10 @@ defmodule SequenceSup.Supervisor do
   end
 
   def start_workers(sup, initial) do
-    {:ok, stash} = Supervisor.start_child(sup, worker(SequenceSup.Stash, [initial]))
+    {:ok, stash} = Supervisor.start_child(
+      sup,
+      worker(SequenceSup.Stash, [%{current_number: initial, delta: 1}])
+    )
     Supervisor.start_child(sup, supervisor(SequenceSup.SubSupervisor, [stash]))
   end
 

@@ -7,21 +7,21 @@ defmodule SequenceSup.Stash do
     {:ok, _pid} = GenServer.start_link(__MODULE__, initial)
   end
 
-  def get_value(stash_pid) do
-    GenServer.call(stash_pid, :get_value)
+  def get_state(stash_pid) do
+    GenServer.call(stash_pid, :get_state)
   end
 
-  def save_value(stash_pid, value) do
-    GenServer.cast(stash_pid, {:save_value, value})
+  def save_state(stash_pid, state) do
+    GenServer.cast(stash_pid, {:save_state, state})
   end
 
   # GenServer implementation
 
-  def handle_call(:get_value, _from, current_number) do
-    {:reply, current_number, current_number}
+  def handle_call(:get_state, _from, state) do
+    {:reply, state, state}
   end
 
-  def handle_cast({:save_value, value}, _current_number) do
-    {:noreply, value}
+  def handle_cast({:save_state, state}, _old_state) do
+    {:noreply, state}
   end
 end

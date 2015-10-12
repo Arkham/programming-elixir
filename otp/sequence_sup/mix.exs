@@ -17,7 +17,8 @@ defmodule SequenceSup.Mixfile do
     [
       mod: {SequenceSup, []},
       env: [initial_number: 456],
-      registered: [SequenceSup.Server]
+      registered: [SequenceSup.Server],
+      applications: [:logger]
     ]
   end
 
