@@ -14,8 +14,11 @@ defmodule SequenceSup.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger],
-     mod: {SequenceSup, []}]
+    [
+      mod: {SequenceSup, []},
+      env: [initial_number: 456],
+      registered: [SequenceSup.Server]
+    ]
   end
 
   # Dependencies can be Hex packages:

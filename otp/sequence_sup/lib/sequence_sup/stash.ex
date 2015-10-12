@@ -4,7 +4,7 @@ defmodule SequenceSup.Stash do
   # public API
 
   def start_link(initial) do
-    {:ok, pid} = GenServer.start_link(__MODULE__, initial)
+    {:ok, _pid} = GenServer.start_link(__MODULE__, initial)
   end
 
   def get_value(stash_pid) do
